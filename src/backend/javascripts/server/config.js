@@ -10,7 +10,7 @@ export const config = {
 
 
     // Apps Script - GANTI DENGAN URL DEPLOY ANDA
-    appsScriptUrl: 'https://script.google.com/macros/s/AKfycbz7PscckTNRF6nvp7Rrsi21luQJu67pt8Yq4lITtLDxvL_3n8Nlwoxuto-0jPQ2ATGV/exec',
+    appsScriptUrl: 'https://script.google.com/macros/s/AKfycbxgbn6S0sKU4Z46kCdPrPTgmsRYvsloN30lytZHNSWaFRGev4oqzVvXnKODWAKgDbW0/exec',
     appsScriptTimeout: 30000,
 
     // JWT

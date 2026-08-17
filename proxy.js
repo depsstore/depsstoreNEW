@@ -7,7 +7,7 @@ const http = require('http');
 const https = require('https');
 const url = require('url');
 
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz7PscckTNRF6nvp7Rrsi21luQJu67pt8Yq4lITtLDxvL_3n8Nlwoxuto-0jPQ2ATGV/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgbn6S0sKU4Z46kCdPrPTgmsRYvsloN30lytZHNSWaFRGev4oqzVvXnKODWAKgDbW0/exec';
 
 const server = http.createServer((req, res) => {
     // CORS headers
