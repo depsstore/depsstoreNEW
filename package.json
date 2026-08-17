@@ -3,15 +3,10 @@
     "version": "2.9.0",
     "type": "module",
     "scripts": {
-<<<<<<< HEAD
         "start": "node main.js",
         "proxy": "node proxy.cjs",
         "dev": "node main.js",
         "vercel-build": "npm install --production"
-=======
-        "start": "node api/index.js",
-        "vercel-build": "echo Build completed"
->>>>>>> 9df786c1bcd5551dcb1a2c5d6963d509b1070ed9
     },
     "dependencies": {
         "express": "^4.18.2",
