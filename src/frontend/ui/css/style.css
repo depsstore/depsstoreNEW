@@ -1,0 +1,822 @@
+/**
+ * style.css - Gaya Utama DepsStore
+ * @version 2.9.0
+ */
+
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f8faff;
+    color: #1a2744;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+.font-days {
+    font-family: 'Days One', sans-serif;
+    letter-spacing: 0.02em;
+}
+
+
+/* ============================================================
+   TOMBOL
+   ============================================================ */
+
+.btn-soft {
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-soft:active {
+    transform: scale(0.97);
+}
+
+
+/* ============================================================
+   DIVIDER
+   ============================================================ */
+
+.divider-brand {
+    width: 44px;
+    height: 2px;
+    background: linear-gradient(90deg, #2563eb, #93c5fd);
+    margin: 0.75rem auto 1.25rem auto;
+    border-radius: 4px;
+    opacity: 0.6;
+}
+
+.shadow-soft {
+    box-shadow: 0 4px 20px -6px rgba(37, 99, 235, 0.04);
+}
+
+.footer-border {
+    border-top: 1px solid rgba(191, 219, 254, 0.3);
+}
+
+.hero-bg {
+    background: linear-gradient(145deg, #fafdff 0%, #f0f7ff 100%);
+}
+
+
+/* ============================================================
+   BADGE
+   ============================================================ */
+
+.badge-promo {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: white;
+    font-size: 0.55rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 20px;
+    letter-spacing: 0.03em;
+    line-height: 1.4;
+}
+
+
+/* ============================================================
+   FEATURE PILLS
+   ============================================================ */
+
+.feature-pill {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(191, 219, 254, 0.25);
+    padding: 0.5rem 1rem;
+    border-radius: 40px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: #1e3a8a;
+    transition: all 0.2s;
+}
+
+.feature-pill:hover {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(37, 99, 235, 0.3);
+}
+
+.feature-pill i {
+    color: #3b82f6;
+    font-size: 0.7rem;
+    opacity: 0.7;
+}
+
+
+/* ============================================================
+   STATISTIK
+   ============================================================ */
+
+.stat-number {
+    font-family: 'Days One', sans-serif;
+    font-size: 1.5rem;
+    color: #1e3a8a;
+    letter-spacing: 0.02em;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    color: #6b8bb0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+
+/* ============================================================
+   KATEGORI CHIP
+   ============================================================ */
+
+.category-chip {
+    background: white;
+    border: 1px solid rgba(191, 219, 254, 0.3);
+    padding: 0.4rem 1rem;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #1e3a8a;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.category-chip:hover {
+    background: #f0f6fe;
+    border-color: #93c5fd;
+    transform: translateY(-2px);
+}
+
+.category-chip i {
+    color: #3b82f6;
+    opacity: 0.6;
+    font-size: 0.65rem;
+}
+
+
+/* ============================================================
+   LAYANAN GRID
+   ============================================================ */
+
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+}
+
+.service-item {
+    background: white;
+    border-radius: 1rem;
+    padding: 1rem 0.5rem;
+    text-align: center;
+    border: 1px solid rgba(191, 219, 254, 0.2);
+    transition: all 0.2s;
+}
+
+.service-item:hover {
+    border-color: #93c5fd;
+    box-shadow: 0 4px 16px -6px rgba(37, 99, 235, 0.06);
+}
+
+.service-item i {
+    font-size: 1.25rem;
+    color: #3b82f6;
+    opacity: 0.6;
+    margin-bottom: 0.4rem;
+}
+
+.service-item h4 {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #1e3a8a;
+    letter-spacing: 0.02em;
+}
+
+.service-item p {
+    font-size: 0.55rem;
+    color: #6b8bb0;
+    margin-top: 0.1rem;
+}
+
+
+/* ============================================================
+   SIDEBAR OVERLAY
+   ============================================================ */
+
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    max-width: 80vw;
+    height: 100%;
+    background: white;
+    z-index: 60;
+    transition: right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: -8px 0 30px rgba(0, 0, 0, 0.06);
+    padding: 2rem 1.5rem;
+    overflow-y: auto;
+}
+
+.sidebar.open {
+    right: 0;
+}
+
+.sidebar .close-btn {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    font-size: 1.25rem;
+    color: #4b6a8b;
+    cursor: pointer;
+    transition: color 0.2s;
+    background: none;
+    border: none;
+}
+
+.sidebar .close-btn:hover {
+    color: #1e3a8a;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.sidebar nav a {
+    color: #1e3a8a;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s;
+    padding: 0.25rem 0;
+    border-bottom: 1px solid rgba(191, 219, 254, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.sidebar nav a:hover {
+    color: #2563eb;
+}
+
+.sidebar nav a i {
+    color: #3b82f6;
+    opacity: 0.5;
+    width: 1.25rem;
+    font-size: 0.85rem;
+}
+
+.sidebar .sidebar-cta {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(191, 219, 254, 0.3);
+}
+
+.sidebar .sidebar-cta button {
+    width: 100%;
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 40px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.sidebar .sidebar-cta button:hover {
+    background: #1d4ed8;
+}
+
+
+/* ============================================================
+   SIDEBAR BRAND
+   ============================================================ */
+
+.sidebar-brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    text-decoration: none;
+}
+
+.sidebar-brand-logo img {
+    height: 1.5rem;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.sidebar-brand-logo img.error {
+    display: none;
+}
+
+.sidebar-brand-logo .brand-text {
+    font-family: 'Days One', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: #1e3a8a;
+    letter-spacing: 0.04em;
+    line-height: 1;
+}
+
+.sidebar-brand-logo .brand-text span {
+    font-weight: 600;
+    color: #2563eb;
+}
+
+
+/* ============================================================
+   BRAND LOGO
+   ============================================================ */
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+}
+
+.brand-logo img {
+    height: 1.6rem;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.brand-logo img.error {
+    display: none;
+}
+
+.brand-logo .brand-text {
+    font-family: 'Days One', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 300;
+    color: #1e3a8a;
+    letter-spacing: 0.04em;
+    line-height: 1;
+}
+
+.brand-logo .brand-text span {
+    font-weight: 600;
+    color: #2563eb;
+}
+
+@media (min-width: 640px) {
+    .brand-logo img {
+        height: 2rem;
+    }
+    .brand-logo .brand-text {
+        font-size: 1.5rem;
+    }
+}
+
+.footer-brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-decoration: none;
+}
+
+.footer-brand-logo img {
+    height: 1.2rem;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.footer-brand-logo img.error {
+    display: none;
+}
+
+.footer-brand-logo .brand-text {
+    font-family: 'Days One', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: #1e3a8a;
+    letter-spacing: 0.04em;
+    line-height: 1;
+}
+
+.footer-brand-logo .brand-text span {
+    font-weight: 600;
+    color: #2563eb;
+}
+
+
+/* ============================================================
+   GAMBAR PRODUK
+   ============================================================ */
+
+.product-image-container {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: linear-gradient(145deg, #e4edf7, #d4e2f0, #c4d8e9);
+    background-size: cover;
+}
+
+.product-image-container .product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 2px 8px rgba(37, 99, 235, 0.06));
+}
+
+.product-image-container .image-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.3rem;
+    background: linear-gradient(145deg, #e4edf7, #d4e2f0);
+    color: #7a9bcb;
+    opacity: 0.8;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.product-image-container .image-fallback i {
+    font-size: 2rem;
+    opacity: 0.6;
+}
+
+.product-image-container .image-fallback .fallback-label {
+    font-size: 0.5rem;
+    font-weight: 400;
+    color: #8aacd6;
+    letter-spacing: 0.03em;
+    opacity: 0.5;
+}
+
+.product-image-container img:not([src]),
+.product-image-container img[src=""],
+.product-image-container img.error {
+    display: none;
+}
+
+.product-image-container img.error+.image-fallback {
+    display: flex;
+}
+
+
+/* ============================================================
+   KARTU PRODUK
+   ============================================================ */
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: white;
+    border-radius: 0.75rem;
+    border: 2px solid rgba(191, 219, 254, 0.2);
+    padding: 0.65rem;
+    transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.2s ease;
+    min-width: 0;
+    width: 100%;
+}
+
+.product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px -8px rgba(37, 99, 235, 0.08);
+    border-color: rgba(37, 99, 235, 0.12);
+}
+
+@media (min-width: 640px) {
+    .product-card {
+        padding: 0.75rem;
+        border-width: 1.5px;
+        border-radius: 1rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .product-card {
+        padding: 1rem;
+        border-radius: 1.25rem;
+    }
+}
+
+.product-card .product-image-container {
+    flex-shrink: 0;
+    border-radius: 0.5rem;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: linear-gradient(145deg, #e4edf7, #d4e2f0, #c4d8e9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+    .product-card .product-image-container {
+        border-radius: 0.75rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .product-card .product-image-container {
+        border-radius: 1rem;
+    }
+}
+
+.product-card .product-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.product-card .product-image-container .image-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.3rem;
+    background: linear-gradient(145deg, #e4edf7, #d4e2f0);
+    color: #7a9bcb;
+    opacity: 0.8;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.product-card .product-image-container .image-fallback i {
+    font-size: 2rem;
+    opacity: 0.6;
+}
+
+.product-card .product-image-container .image-fallback .fallback-label {
+    font-size: 0.5rem;
+    font-weight: 400;
+    color: #8aacd6;
+    letter-spacing: 0.03em;
+    opacity: 0.5;
+}
+
+.product-card .product-image-container img:not([src]),
+.product-card .product-image-container img[src=""],
+.product-card .product-image-container img.error {
+    display: none;
+}
+
+.product-card .product-image-container img.error+.image-fallback {
+    display: flex;
+}
+
+.product-card .product-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.5rem;
+    gap: 0.15rem;
+}
+
+.product-card .product-info .product-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #1e3a8a;
+    line-height: 1.2;
+}
+
+@media (min-width: 640px) {
+    .product-card .product-info .product-title {
+        font-size: 0.85rem;
+    }
+}
+
+.product-card .product-info .product-desc {
+    font-size: 0.6rem;
+    color: #6b8bb0;
+    line-height: 1.2;
+    flex-shrink: 0;
+}
+
+@media (min-width: 640px) {
+    .product-card .product-info .product-desc {
+        font-size: 0.7rem;
+    }
+}
+
+.product-card .product-info .product-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 0.35rem;
+    border-top: 1px solid rgba(191, 219, 254, 0.15);
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+.product-card .product-info .product-price {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #1d4ed8;
+}
+
+@media (min-width: 640px) {
+    .product-card .product-info .product-price {
+        font-size: 1rem;
+    }
+}
+
+.product-card .product-info .add-btn {
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 0.6rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(191, 219, 254, 0.3);
+    transition: background 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+    .product-card .product-info .add-btn {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.9rem;
+    }
+}
+
+.product-card .product-info .add-btn:hover {
+    background: #dbeafe;
+}
+
+.product-card .product-info .add-btn i {
+    font-size: 0.5rem;
+}
+
+@media (min-width: 640px) {
+    .product-card .product-info .add-btn i {
+        font-size: 0.6rem;
+    }
+}
+
+.product-card .badge-promo {
+    font-size: 0.45rem;
+    padding: 0.1rem 0.4rem;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 10;
+}
+
+@media (min-width: 640px) {
+    .product-card .badge-promo {
+        font-size: 0.55rem;
+        padding: 0.15rem 0.5rem;
+        top: 0.65rem;
+        right: 0.65rem;
+    }
+}
+
+
+/* ============================================================
+   GRID PRODUK
+   ============================================================ */
+
+.product-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+}
+
+@media (min-width: 640px) {
+    .product-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .product-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .product-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.25rem;
+    }
+}
+
+@media (min-width: 1280px) {
+    .product-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1.5rem;
+    }
+}
+
+@media (min-width: 1536px) {
+    .product-grid {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 1.5rem;
+    }
+}
+
+
+/* ============================================================
+   ANIMASI
+   ============================================================ */
+
+* {
+    animation: none !important;
+    transition-duration: 0.2s !important;
+}
+
+.card-transition,
+.btn-soft,
+.feature-pill,
+.category-chip,
+.service-item,
+.sidebar nav a,
+.sidebar .close-btn,
+.sidebar .sidebar-cta button {
+    transition-duration: 0.15s !important;
+}
+
+.sidebar,
+.sidebar-overlay {
+    transition-duration: 0.25s !important;
+}
+
+.no-animate {
+    animation: none !important;
+    transition: none !important;
+}
+
+
+/* ============================================================
+   LOADING SPINNER
+   ============================================================ */
+
+.loading-spinner {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(37, 99, 235, 0.1);
+    border-radius: 50%;
+    border-top-color: #2563eb;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
