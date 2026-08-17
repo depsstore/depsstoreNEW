@@ -15,67 +15,63 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// 🔥 PASTIKAN URL INI BENAR
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgbn6S0sKU4Z46kCdPrPTgmsRYvsloN30lytZHNSWaFRGev4oqzVvXnKODWAKgDbW0/exec';
 
-// 🔥 TAMBAHKAN: Test endpoint langsung
-app.get('/api/test', (req, res) => {
+// 🔥 FIX: Root API
+app.get('/api/v2', (req, res) => {
     res.json({
         success: true,
-        message: 'API is working!',
-        appsScriptUrl: APPS_SCRIPT_URL,
-        timestamp: new Date().toISOString()
+        message: 'DepsStore API v2',
+        version: '2.9.0',
+        endpoints: {
+            health: '/api/v2/system/health',
+            login: '/api/v2/auth/login',
+            register: '/api/v2/auth/register',
+            products: '/api/v2/products',
+            orders: '/api/v2/orders',
+            customers: '/api/v2/customers',
+            users: '/api/v2/users',
+            support: '/api/v2/support',
+            dashboard: '/api/v2/dashboard',
+            backups: '/api/v2/backups',
+            logs: '/api/v2/logs'
+        }
     });
 });
 
-// Health check - dengan error handling lebih baik
+// 🔥 FIX: Health Check (SUDAH BERHASIL)
 app.get('/api/v2/system/health', async (req, res) => {
     try {
         const url = APPS_SCRIPT_URL + '/api/v2/system/health';
-        console.log('Fetching:', url);
+        console.log('Fetching health:', url);
         
         const response = await fetch(url);
-        
-        // 🔥 Cek status response
-        if (!response.ok) {
-            const text = await response.text();
-            console.error('Apps Script error response:', text.substring(0, 200));
-            return res.status(502).json({
-                success: false,
-                error: 'Apps Script returned error',
-                status: response.status,
-                details: text.substring(0, 200)
-            });
-        }
-        
         const data = await response.json();
         res.json(data);
-        
     } catch (error) {
-        console.error('Health check error:', error);
-        res.status(500).json({
-            success: false,
-            error: error.message,
-            stack: error.stack
-        });
+        console.error('Health error:', error);
+        res.status(500).json({ success: false, error: error.message });
     }
 });
 
-// Products
+// 🔥 FIX: Products - PASTIKAN PATH BENAR
 app.get('/api/v2/products', async (req, res) => {
     try {
+        // 🔥 PERHATIKAN: Tidak ada '/api/v2' tambahan
         const url = APPS_SCRIPT_URL + '/api/v2/products';
         console.log('Fetching products:', url);
         
         const response = await fetch(url);
         
+        // 🔥 Cek response
         if (!response.ok) {
             const text = await response.text();
             console.error('Products error response:', text.substring(0, 200));
             return res.status(502).json({
                 success: false,
                 error: 'Apps Script returned error',
-                status: response.status
+                status: response.status,
+                details: text.substring(0, 200)
             });
         }
         
@@ -91,7 +87,7 @@ app.get('/api/v2/products', async (req, res) => {
     }
 });
 
-// Login
+// 🔥 FIX: Login
 app.post('/api/v2/auth/login', async (req, res) => {
     try {
         const url = APPS_SCRIPT_URL + '/api/v2/auth/login';
@@ -105,7 +101,6 @@ app.post('/api/v2/auth/login', async (req, res) => {
         
         if (!response.ok) {
             const text = await response.text();
-            console.error('Login error response:', text.substring(0, 200));
             return res.status(502).json({
                 success: false,
                 error: 'Apps Script returned error',
@@ -125,7 +120,7 @@ app.post('/api/v2/auth/login', async (req, res) => {
     }
 });
 
-// Register
+// 🔥 FIX: Register
 app.post('/api/v2/auth/register', async (req, res) => {
     try {
         const url = APPS_SCRIPT_URL + '/api/v2/auth/register';
@@ -156,46 +151,58 @@ app.post('/api/v2/auth/register', async (req, res) => {
     }
 });
 
-// Root API
-app.get('/api/v2', (req, res) => {
-    res.json({
-        success: true,
-        message: 'DepsStore API v2',
-        version: '2.9.0',
-        endpoints: {
-            test: '/api/test',
-            health: '/api/v2/system/health',
-            login: '/api/v2/auth/login',
-            register: '/api/v2/auth/register',
-            products: '/api/v2/products',
-            orders: '/api/v2/orders',
-            customers: '/api/v2/customers',
-            users: '/api/v2/users',
-            support: '/api/v2/support',
-            dashboard: '/api/v2/dashboard',
-            backups: '/api/v2/backups',
-            logs: '/api/v2/logs'
-        },
-        appsScriptUrl: APPS_SCRIPT_URL
-    });
+// 🔥 FIX: Products dengan query params (search, filter)
+app.get('/api/v2/products/*', async (req, res) => {
+    try {
+        const path = req.path.replace('/api/v2/products', '');
+        const url = APPS_SCRIPT_URL + '/api/v2/products' + path + '?' + new URLSearchParams(req.query).toString();
+        console.log('Fetching products with query:', url);
+        
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            const text = await response.text();
+            return res.status(502).json({
+                success: false,
+                error: 'Apps Script returned error',
+                status: response.status
+            });
+        }
+        
+        const data = await response.json();
+        res.json(data);
+        
+    } catch (error) {
+        console.error('Products query error:', error);
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
 });
 
-// Proxy fallback
+// 🔥 FIX: Proxy fallback untuk endpoint lain
 app.all('/api/v2/*', async (req, res) => {
     try {
+        // Ambil path setelah /api/v2
         const path = req.path.replace('/api/v2', '');
         const url = APPS_SCRIPT_URL + '/api/v2' + path;
         
         console.log('Proxy:', req.method, url);
 
-        const response = await fetch(url, {
+        const options = {
             method: req.method,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': req.headers.authorization || ''
-            },
-            body: req.method === 'POST' || req.method === 'PUT' ? JSON.stringify(req.body) : undefined
-        });
+            }
+        };
+
+        if (req.method === 'POST' || req.method === 'PUT') {
+            options.body = JSON.stringify(req.body);
+        }
+
+        const response = await fetch(url, options);
 
         if (!response.ok) {
             const text = await response.text();
@@ -219,5 +226,5 @@ app.all('/api/v2/*', async (req, res) => {
     }
 });
 
-// 🔥 Export default
+// 🔥 EXPORT
 export default app;
