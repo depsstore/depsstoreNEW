@@ -3,7 +3,7 @@
     "version": "2.9.0",
     "type": "module",
     "scripts": {
-        "start": "node api/index.cjs",
+        "start": "node api/index.js",
         "vercel-build": "echo Build completed"
     },
     "dependencies": {
