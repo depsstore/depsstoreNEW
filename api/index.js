@@ -1,14 +1,14 @@
 /**
- * api/index.js - Vercel Serverless Function (CommonJS)
+ * api/index.js - Vercel Serverless Function
  * @version 2.9.0
  */
 
-// 🔥 PAKAI COMMONJS (require) untuk Vercel
+// 🔥 PAKAI const UNTUK SATU KALI DEKLARASI
 const https = require('https');
 const http = require('http');
 const url = require('url');
 
-// 🔥 APPS SCRIPT URL
+// 🔥 APPS SCRIPT URL - HANYA SATU DEKLARASI
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw1ZgXJUaQ-U0RVeaNIdhszUvexE4IjUFmGaxI_QCPOSg55uQRFtrCCEbrOl8KvsftV/exec';
 
 // 🔥 MOCK DATA
