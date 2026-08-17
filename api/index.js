@@ -3,7 +3,7 @@
  * @version 2.9.0
  */
 
-<<<<<<< HEAD
+HEAD
 // 🔥 APPS SCRIPT URL - PAKAI YANG BARU
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw1ZgXJUaQ-U0RVeaNIdhszUvexE4IjUFmGaxI_QCPOSg55uQRFtrCCEbrOl8KvsftV/exec';
 
@@ -520,7 +520,7 @@ module.exports = async(req, res) => {
         timestamp: new Date().toISOString()
     });
 };
-=======
+
 import express from 'express';
 import cors from 'cors';
 
@@ -574,7 +574,7 @@ app.get('/api/v2', (req, res) => {
 });
 
 // Health check
-app.get('/api/v2/system/health', async (req, res) => {
+app.get('/api/v2/system/health', async(req, res) => {
     try {
         console.log('🩺 Health check requested');
         const response = await fetch(APPS_SCRIPT_URL + '/api/v2/system/health');
@@ -587,12 +587,12 @@ app.get('/api/v2/system/health', async (req, res) => {
 });
 
 // Products
-app.get('/api/v2/products', async (req, res) => {
+app.get('/api/v2/products', async(req, res) => {
     try {
         console.log('📦 Products requested');
         const url = APPS_SCRIPT_URL + '/api/v2/products';
         const response = await fetch(url);
-        
+
         if (!response.ok) {
             const text = await response.text();
             console.error('Products error:', text.substring(0, 200));
@@ -602,7 +602,7 @@ app.get('/api/v2/products', async (req, res) => {
                 details: text.substring(0, 200)
             });
         }
-        
+
         const data = await response.json();
         res.json(data);
     } catch (error) {
@@ -612,7 +612,7 @@ app.get('/api/v2/products', async (req, res) => {
 });
 
 // Login
-app.post('/api/v2/auth/login', async (req, res) => {
+app.post('/api/v2/auth/login', async(req, res) => {
     try {
         console.log('🔐 Login requested');
         const response = await fetch(APPS_SCRIPT_URL + '/api/v2/auth/login', {
@@ -629,7 +629,7 @@ app.post('/api/v2/auth/login', async (req, res) => {
 });
 
 // Register
-app.post('/api/v2/auth/register', async (req, res) => {
+app.post('/api/v2/auth/register', async(req, res) => {
     try {
         console.log('📝 Register requested');
         const response = await fetch(APPS_SCRIPT_URL + '/api/v2/auth/register', {
@@ -646,12 +646,12 @@ app.post('/api/v2/auth/register', async (req, res) => {
 });
 
 // 🔥 FALLBACK: Semua request /api/*
-app.all('/api/*', async (req, res) => {
+app.all('/api/*', async(req, res) => {
     try {
         const path = req.path;
         const url = APPS_SCRIPT_URL + path;
         console.log('🔄 Proxy:', req.method, url);
-        
+
         const options = {
             method: req.method,
             headers: {
@@ -701,4 +701,3 @@ app.use((req, res) => {
 });
 
 export default app;
->>>>>>> 9df786c1bcd5551dcb1a2c5d6963d509b1070ed9
