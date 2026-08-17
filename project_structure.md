@@ -1,18 +1,21 @@
 # 📁 depsstoreNew - Project Structure
 
-*Generated on: 8/16/2026, 3:33:18 PM*
+*Generated on: 8/17/2026, 8:49:02 AM*
 
 ## 📋 Quick Overview
 
 | Metric | Value |
 |--------|-------|
-| 📄 Total Files | 148 |
-| 📁 Total Folders | 47 |
+| 📄 Total Files | 160 |
+| 📁 Total Folders | 50 |
 | 🌳 Max Depth | 7 levels |
 | 🛠️ Tech Stack | CSS, Sass/SCSS, Node.js |
 
 ## ⭐ Important Files
 
+- 🟡 🚫 **.gitignore** - Git ignore rules
+- 🟡 🔒 **package-lock.json** - Dependency lock
+- 🔴 📦 **package.json** - Package configuration
 - 🟡 🚫 **.gitignore** - Git ignore rules
 - 🔵 📝 **CHANGELOG.md** - Change log
 - 🟡 🔒 **package-lock.json** - Dependency lock
@@ -24,45 +27,46 @@
 - 🔴 📖 **README.md** - Project documentation
 - 🔴 📖 **README.md** - Project documentation
 - 🔴 📖 **README.md** - Project documentation
+- 🔵 ▲ **vercel.json** - Vercel config
 
 ## 📊 File Statistics
 
 ### By File Type
 
-- 🌐 **.html** (HTML files): 26 files (17.6%)
-- 📜 **.js** (JavaScript files): 24 files (16.2%)
-- 🎨 **.scss** (Sass stylesheets): 24 files (16.2%)
-- 🖼️ **.jpg** (JPEG images): 14 files (9.5%)
-- 🎨 **.svg** (SVG images): 13 files (8.8%)
-- 📖 **.md** (Markdown files): 9 files (6.1%)
-- 🎨 **.css** (Stylesheets): 6 files (4.1%)
-- 🔤 **.ttf** (TrueType fonts): 6 files (4.1%)
-- 🔤 **.woff** (Web fonts): 6 files (4.1%)
-- 📄 **.eot** (Other files): 5 files (3.4%)
-- 🔤 **.woff2** (Web fonts): 5 files (3.4%)
-- ⚙️ **.json** (JSON files): 3 files (2.0%)
-- 📄 **.** (Other files): 2 files (1.4%)
-- 🚫 **.gitignore** (Git ignore): 1 files (0.7%)
-- ⚙️ **.yml** (YAML files): 1 files (0.7%)
-- 🖼️ **.png** (PNG images): 1 files (0.7%)
-- 📄 **.lock** (Other files): 1 files (0.7%)
-- 📄 **.txt** (Text files): 1 files (0.7%)
+- 🌐 **.html** (HTML files): 28 files (17.5%)
+- 📜 **.js** (JavaScript files): 27 files (16.9%)
+- 🎨 **.scss** (Sass stylesheets): 24 files (15.0%)
+- 🖼️ **.jpg** (JPEG images): 14 files (8.8%)
+- 🎨 **.svg** (SVG images): 13 files (8.1%)
+- 📖 **.md** (Markdown files): 9 files (5.6%)
+- ⚙️ **.json** (JSON files): 6 files (3.8%)
+- 🎨 **.css** (Stylesheets): 6 files (3.8%)
+- 🔤 **.ttf** (TrueType fonts): 6 files (3.8%)
+- 🔤 **.woff** (Web fonts): 6 files (3.8%)
+- 📄 **.eot** (Other files): 5 files (3.1%)
+- 🔤 **.woff2** (Web fonts): 5 files (3.1%)
+- 🚫 **.gitignore** (Git ignore): 3 files (1.9%)
+- 🖼️ **.png** (PNG images): 3 files (1.9%)
+- 📄 **.** (Other files): 2 files (1.3%)
+- ⚙️ **.yml** (YAML files): 1 files (0.6%)
+- 📄 **.lock** (Other files): 1 files (0.6%)
+- 📄 **.txt** (Text files): 1 files (0.6%)
 
 ### By Category
 
-- **Assets**: 45 files (30.4%)
-- **Styles**: 30 files (20.3%)
-- **Web**: 26 files (17.6%)
-- **JavaScript**: 24 files (16.2%)
-- **Docs**: 10 files (6.8%)
-- **Other**: 8 files (5.4%)
-- **Config**: 4 files (2.7%)
-- **DevOps**: 1 files (0.7%)
+- **Assets**: 47 files (29.4%)
+- **Styles**: 30 files (18.8%)
+- **Web**: 28 files (17.5%)
+- **JavaScript**: 27 files (16.9%)
+- **Docs**: 10 files (6.3%)
+- **Other**: 8 files (5.0%)
+- **Config**: 7 files (4.4%)
+- **DevOps**: 3 files (1.9%)
 
 ### 📁 Largest Directories
 
-- **root**: 148 files
-- **src**: 144 files
+- **root**: 160 files
+- **src**: 150 files
 - **src\template-admin**: 119 files
 - **src\template-admin\src**: 108 files
 - **src\template-admin\src\assets**: 85 files
@@ -71,7 +75,13 @@
 
 ```
 depsstoreNew/
+├── 🚫  - Copy.gitignore
+├── 🟡 🚫 **.gitignore**
+├── 🔌 api/
+│   └── 📜 api.js
 ├── 🌐 index.html
+├── 🟡 🔒 **package-lock.json**
+├── 🔴 📦 **package.json**
 ├── 📖 project_structure.md
 ├── 📜 proxy.js
 ├── 📁 src/
@@ -95,8 +105,12 @@ depsstoreNew/
 │   │   │   │   ├── 📜 middleware.js
 │   │   │   │   ├── 📜 routes.js
 │   │   │   │   └── 📜 utils.js
-│   │   └── 📜 main.js
+│   │   ├── 📜 main.js
+│   │   └── 📜 server.js
 │   ├── 📂 frontend/
+│   │   ├── 📂 auth/
+│   │   │   ├── 🌐 login.html
+│   │   │   └── 🌐 register.html
 │   │   ├── 🌐 checkout.html
 │   │   ├── 🌐 Guide.html
 │   │   ├── 🌐 order-details.html
@@ -106,7 +120,11 @@ depsstoreNew/
 │   │   └── 🎨 ui/
 │   │   │   ├── 🎨 css/
 │   │   │   │   └── 🎨 style.css
+│   │   │   ├── 📂 img/
+│   │   │   │   ├── 🖼️ brandlatar.png
+│   │   │   │   └── 🖼️ brandnolatar.png
 │   │   │   └── 📂 js/
+│   │   │   │   ├── 📜 config.js
 │   │   │   │   ├── 📜 main.js
 │   │   │   │   ├── 📜 products.js
 │   │   │   │   └── 📜 sidebar.js
@@ -265,25 +283,26 @@ depsstoreNew/
 │   │   │   │   │   ├── 🌐 login-v1.html
 │   │   │   │   │   └── 🌐 register-v1.html
 │   │   └── 📄 yarn.lock
-└── 📄 struktur apps scritps.txt
+├── 📄 struktur apps scritps.txt
+└── 🔵 ▲ **vercel.json**
 ```
 
 ## 📖 Legend
 
 ### File Types
-- 🌐 Web: HTML files
-- 📖 Docs: Markdown files
-- 📜 JavaScript: JavaScript files
-- 🎨 Styles: Stylesheets
 - 🚫 DevOps: Git ignore
+- 📜 JavaScript: JavaScript files
+- 🌐 Web: HTML files
+- ⚙️ Config: JSON files
+- 📖 Docs: Markdown files
+- 🎨 Styles: Stylesheets
+- 🖼️ Assets: PNG images
 - 📄 Other: Other files
 - ⚙️ Config: YAML files
-- ⚙️ Config: JSON files
 - 🎨 Assets: SVG images
 - 🔤 Assets: TrueType fonts
 - 🔤 Assets: Web fonts
 - 🔤 Assets: Web fonts
-- 🖼️ Assets: PNG images
 - 🖼️ Assets: JPEG images
 - 🎨 Styles: Sass stylesheets
 - 📄 Docs: Text files

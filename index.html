@@ -6,37 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DepsStore · Landing Page</title>
 
-    <!-- Tailwind via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-
-    <!-- Google Font: Days One -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Days+One&display=swap" rel="stylesheet" />
 
-    <!-- CSS Utama (dipisahkan dari HTML) -->
-    <link rel="stylesheet" href="./src/frontend/ui/css/style.css" />
+    <!-- 🔥 FIX: Path CSS (tanpa ./ di root) -->
+    <link rel="stylesheet" href="src/frontend/ui/css/style.css" />
 </head>
 
 <body>
 
     <!-- ============================================================ -->
-    <!-- SIDEBAR OVERLAY -->
+    <!-- SIDEBAR -->
     <!-- ============================================================ -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- ============================================================ -->
-    <!-- SIDEBAR MOBILE -->
-    <!-- ============================================================ -->
     <aside class="sidebar" id="sidebar">
         <button class="close-btn" id="closeSidebarBtn" aria-label="Tutup menu">
             <i class="fas fa-times"></i>
         </button>
         <a href="index.html" class="sidebar-brand-logo">
-            <img src="./src/frontend/ui/img/brandlatar.png" alt="DepsStore Logo" onerror="this.classList.add('error'); this.alt='DepsStore';" />
+            <img src="src/frontend/ui/img/brandlatar.png" alt="DepsStore Logo" onerror="this.classList.add('error'); this.alt='DepsStore';" />
             <span class="brand-text">Deps<span>Store</span></span>
         </a>
         <nav>
@@ -63,14 +55,14 @@
     <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-blue-100/20 shadow-soft transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-10 flex items-center justify-between h-14 sm:h-16">
             <a href="index.html" class="brand-logo">
-                <img src="./src/frontend/ui/img/brandlatar.png" alt="DepsStore Logo" onerror="this.classList.add('error'); this.alt='DepsStore';" />
+                <img src="src/frontend/ui/img/brandlatar.png" alt="DepsStore Logo" onerror="this.classList.add('error'); this.alt='DepsStore';" />
                 <span class="brand-text">Deps<span>Store</span></span>
             </a>
             <nav class="hidden md:flex items-center space-x-6 lg:space-x-8 text-sm font-medium text-blue-800/60">
-                <a href="index.html" class="hover:text-blue-600 transition-colors">Beranda</a>
-                <a href="products.html" class="hover:text-blue-600 transition-colors">Koleksi</a>
-                <a href="#" class="hover:text-blue-600 transition-colors">Tentang</a>
-                <a href="support.html" class="hover:text-blue-600 transition-colors">Kontak</a>
+                <a href="index.html">Beranda</a>
+                <a href="products.html">Koleksi</a>
+                <a href="#">Tentang</a>
+                <a href="support.html">Kontak</a>
             </nav>
             <div class="flex items-center gap-2 sm:gap-3">
                 <button onclick="window.location.href='checkout.html'" class="hidden sm:flex items-center gap-2 bg-blue-50/70 hover:bg-blue-100/70 text-blue-700 text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full transition btn-soft border border-blue-100/30">
@@ -178,7 +170,6 @@
 
         <!-- PRODUCT GRID -->
         <div id="productGrid" class="product-grid">
-            <!-- Akan diisi oleh JavaScript dari API -->
             <div class="text-center col-span-full py-10 text-blue-400/60">
                 <div class="loading-spinner"></div>
                 <p class="mt-2">Memuat produk...</p>
@@ -191,7 +182,7 @@
             </a>
         </div>
 
-        <!-- LAYANAN / KEUNGGULAN -->
+        <!-- LAYANAN -->
         <div class="mt-12 sm:mt-16 pt-6 sm:pt-8 border-t border-blue-100/20">
             <h3 class="text-xs sm:text-sm font-medium text-blue-800/70 tracking-wide text-center mb-4 sm:mb-6">Keunggulan Layanan</h3>
             <div class="service-grid">
@@ -250,30 +241,32 @@
     <footer class="bg-white footer-border py-6 sm:py-8 px-4 sm:px-6 text-sm text-blue-700/50">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
             <a href="index.html" class="footer-brand-logo">
-                <img src="https://i.imgur.com/lqk3liS.png" alt="DepsStore Logo" onerror="this.classList.add('error'); this.alt='DepsStore';" />
+                <img src="src/frontend/ui/img/brandlatar.png" alt="DepsStore Logo" onerror="this.classList.add('error'); this.alt='DepsStore';" />
                 <span class="brand-text">Deps<span>Store</span></span>
             </a>
             <div class="flex items-center gap-4 sm:gap-6 text-[10px] sm:text-xs">
-                <a href="#" class="hover:text-blue-600 transition-colors">Kebijakan Privasi</a>
-                <a href="#" class="hover:text-blue-600 transition-colors">Syarat & Ketentuan</a>
+                <a href="#">Kebijakan Privasi</a>
+                <a href="#">Syarat & Ketentuan</a>
                 <div class="flex gap-2 sm:gap-3 text-blue-300/60">
-                    <a href="#" class="hover:text-blue-500 transition-colors"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="hover:text-blue-500 transition-colors"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="hover:text-blue-500 transition-colors"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
         </div>
         <div class="text-center sm:hidden mt-2 text-[8px] text-blue-300/30">minimalis · elegan · timeless</div>
     </footer>
 
-    <script src="ui/js/config.js"></script>
+    <!-- ============================================================ -->
+    <!-- JAVASCRIPT -->
+    <!-- ============================================================ -->
 
-    <!-- Sisanya -->
-    <script src="ui/js/main.js"></script>
-    <script src="ui/js/sidebar.js"></script>
-    <script src="ui/js/products.js"></script>
+    <!-- 🔥 FIX: Path JS (tanpa ./ di root) -->
+    <script src="src/frontend/ui/js/config.js"></script>
+    <script src="src/frontend/ui/js/main.js"></script>
+    <script src="src/frontend/ui/js/sidebar.js"></script>
+    <script src="src/frontend/ui/js/products.js"></script>
 
-    <!-- Inisialisasi -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             loadProducts();
