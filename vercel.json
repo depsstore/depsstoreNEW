@@ -1,16 +1,11 @@
 {
     "version": 2,
     "builds": [{
-        "src": "api/index.cjs",
+        "src": "api/index.js",
         "use": "@vercel/node"
     }],
     "routes": [{
-            "src": "/api/v2/(.*)",
-            "dest": "/api/index.cjs"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/frontend/$1"
-        }
-    ]
+        "src": "/api/(.*)",
+        "dest": "/api/index.js"
+    }]
 }
