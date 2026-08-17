@@ -1,6 +1,6 @@
 # 📁 depsstoreNew - Project Structure
 
-*Generated on: 8/17/2026, 8:49:02 AM*
+*Generated on: 8/17/2026, 10:37:50 AM*
 
 ## 📋 Quick Overview
 
@@ -78,7 +78,7 @@ depsstoreNew/
 ├── 🚫  - Copy.gitignore
 ├── 🟡 🚫 **.gitignore**
 ├── 🔌 api/
-│   └── 📜 api.js
+│   └── 📜 index.js
 ├── 🌐 index.html
 ├── 🟡 🔒 **package-lock.json**
 ├── 🔴 📦 **package.json**

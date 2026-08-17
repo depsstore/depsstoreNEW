@@ -3,11 +3,14 @@
     "version": "2.9.0",
     "type": "module",
     "scripts": {
-        "start": "node api/index.cjs",
-        "vercel-build": "echo Build completed"
+        "start": "node main.js",
+        "proxy": "node proxy.cjs",
+        "dev": "node main.js",
+        "vercel-build": "npm install --production"
     },
     "dependencies": {
         "express": "^4.18.2",
-        "cors": "^2.8.5"
+        "cors": "^2.8.5",
+        "node-fetch": "^3.3.2"
     }
 }

@@ -7,10 +7,10 @@
 export const config = {
     // Server
     env: 'development',
-
+    port: 3000,
 
     // Apps Script - GANTI DENGAN URL DEPLOY ANDA
-    appsScriptUrl: 'https://script.google.com/macros/s/AKfycbxgbn6S0sKU4Z46kCdPrPTgmsRYvsloN30lytZHNSWaFRGev4oqzVvXnKODWAKgDbW0/exec',
+    appsScriptUrl: 'https://script.google.com/macros/s/AKfycbw1ZgXJUaQ-U0RVeaNIdhszUvexE4IjUFmGaxI_QCPOSg55uQRFtrCCEbrOl8KvsftV/exec',
     appsScriptTimeout: 30000,
 
     // JWT

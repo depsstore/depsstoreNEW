@@ -34,6 +34,9 @@ export var router = {
         this.register('GET', '/api/v2', this.handleApiRoot);
         this.register('GET', '/api/v2/', this.handleApiRoot);
 
+        // 🔥 TEST ENDPOINT - Cek koneksi ke Apps Script
+        this.register('GET', '/api/v2/test', this.handleTest);
+
         // Auth
         this.register('POST', '/api/v2/auth/login', this.controllers.auth.login);
         this.register('POST', '/api/v2/auth/register', this.controllers.auth.register);
@@ -180,6 +183,7 @@ export var router = {
             version: '2.9.0',
             endpoints: {
                 health: '/api/v2/system/health',
+                test: '/api/v2/test',
                 login: '/api/v2/auth/login',
                 register: '/api/v2/auth/register',
                 products: '/api/v2/products',
@@ -195,12 +199,34 @@ export var router = {
         });
     },
 
+    handleTest: async function(req, res) {
+        try {
+            var result = await api.testConnection();
+            res.json({
+                success: true,
+                message: 'Apps Script connection test',
+                result: result,
+                config: {
+                    appsScriptUrl: api.baseUrl
+                },
+                timestamp: new Date().toISOString()
+            });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                error: error.message,
+                stack: error.stack
+            });
+        }
+    },
+
     handleHealth: async function(req, res) {
         res.json({
             status: 'healthy',
             timestamp: new Date().toISOString(),
             version: '2.9.0',
-            environment: 'development'
+            environment: 'development',
+            appsScriptUrl: api.baseUrl
         });
     },
 

@@ -22,8 +22,10 @@ export class AppsScriptAPI {
             var options = {
                 method: method,
                 headers: {
-                    'Content-Type': 'application/json'
-                }
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                timeout: this.timeout
             };
 
             if (token) {
@@ -37,7 +39,29 @@ export class AppsScriptAPI {
             logger.debug('AppsScript Request: ' + method + ' ' + path);
 
             var response = await fetch(url, options);
-            var result = await response.json();
+
+            // 🔥 Cek response content-type
+            var contentType = response.headers.get('content-type');
+            var result;
+
+            if (contentType && contentType.includes('application/json')) {
+                result = await response.json();
+            } else {
+                // 🔥 Jika bukan JSON, baca sebagai text
+                var text = await response.text();
+                logger.error('AppsScript returned non-JSON response', {
+                    status: response.status,
+                    contentType: contentType,
+                    preview: text.substring(0, 200)
+                });
+
+                // 🔥 Cek jika response adalah HTML (error dari Apps Script)
+                if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html')) {
+                    throw new Error('Apps Script returned HTML page. Please check the Apps Script deployment URL.');
+                }
+
+                throw new Error('Invalid response format: ' + text.substring(0, 100));
+            }
 
             logger.debug('AppsScript Response: ' + method + ' ' + path + ' - ' + response.status);
 
@@ -45,10 +69,55 @@ export class AppsScriptAPI {
 
         } catch (error) {
             logger.error('AppsScript Error: ' + method + ' ' + path, {
-                message: error.message
+                message: error.message,
+                stack: error.stack
             });
 
             throw new Error('AppsScript service error: ' + error.message);
+        }
+    }
+
+    // ============================================================
+    // TEST - Cek koneksi ke Apps Script
+    // ============================================================
+
+    async testConnection() {
+        try {
+            var url = this.baseUrl + '/api/v2/products?limit=1';
+            var response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                },
+                timeout: this.timeout
+            });
+
+            var contentType = response.headers.get('content-type');
+            var result;
+
+            if (contentType && contentType.includes('application/json')) {
+                result = await response.json();
+            } else {
+                var text = await response.text();
+                return {
+                    success: false,
+                    status: response.status,
+                    contentType: contentType,
+                    preview: text.substring(0, 200),
+                    isHTML: text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html')
+                };
+            }
+
+            return {
+                success: true,
+                status: response.status,
+                data: result
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
         }
     }
 
