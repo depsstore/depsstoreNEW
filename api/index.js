@@ -1,9 +1,10 @@
-// api/index.js - Vercel Serverless Function
+// api/index.js - Vercel Serverless Function (PERBAIKAN FINAL)
 const https = require('https');
 const http = require('http');
 const url = require('url');
 
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw1ZgXJUaQ-U0RVeaNIdhszUvexE4IjUFmGaxI_QCPOSg55uQRFtrCCEbrOl8KvsftV/exec';
+const BUATQRIS_API = 'https://api.buatqris.site';
 
 function fetchRequest(targetUrl, options = {}) {
   return new Promise((resolve, reject) => {
@@ -62,9 +63,7 @@ module.exports = async (req, res) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${path}`);
 
   try {
-    // ============================================================
     // 🔥 ROOT
-    // ============================================================
     if (path === '/' || path === '/api/v2/' || path === '/api/v2') {
       res.status(200).json({
         success: true,
@@ -88,9 +87,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // ============================================================
-    // 🔥 HEALTH CHECK
-    // ============================================================
+    // 🔥 HEALTH
     if (path === '/health' || path === '/api/v2/system/health') {
       res.status(200).json({
         status: 'healthy',
@@ -101,9 +98,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // ============================================================
     // 🔥 PRODUCTS (PROXY KE APPS SCRIPT)
-    // ============================================================
     if (path.startsWith('/api/v2/products')) {
       const targetUrl = `${APPS_SCRIPT_URL}?action=getProducts`;
       const response = await fetchRequest(targetUrl);
@@ -112,9 +107,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // ============================================================
     // 🔥 ORDERS (PROXY KE APPS SCRIPT)
-    // ============================================================
     if (path.startsWith('/api/v2/orders')) {
       const targetUrl = `${APPS_SCRIPT_URL}?action=getOrders`;
       const response = await fetchRequest(targetUrl);
@@ -123,9 +116,16 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // ============================================================
-    // 🔥 AUTH LOGIN (PROXY KE APPS SCRIPT)
-    // ============================================================
+    // 🔥 STATS (PROXY KE APPS SCRIPT)
+    if (path.startsWith('/api/v2/stats')) {
+      const targetUrl = `${APPS_SCRIPT_URL}?action=getStats`;
+      const response = await fetchRequest(targetUrl);
+      const jsonData = JSON.parse(response.data);
+      res.status(response.status || 200).json(jsonData);
+      return;
+    }
+
+    // 🔥 AUTH LOGIN (PROXY KE APPS SCRIPT - POST)
     if (path === '/api/v2/auth/login' && req.method === 'POST') {
       const targetUrl = `${APPS_SCRIPT_URL}?action=login`;
       const response = await fetchRequest(targetUrl, {
@@ -138,9 +138,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // ============================================================
-    // 🔥 AUTH REGISTER (PROXY KE APPS SCRIPT)
-    // ============================================================
+    // 🔥 AUTH REGISTER (PROXY KE APPS SCRIPT - POST)
     if (path === '/api/v2/auth/register' && req.method === 'POST') {
       const targetUrl = `${APPS_SCRIPT_URL}?action=register`;
       const response = await fetchRequest(targetUrl, {
@@ -153,20 +151,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // ============================================================
-    // 🔥 STATS (PROXY KE APPS SCRIPT)
-    // ============================================================
-    if (path.startsWith('/api/v2/stats')) {
-      const targetUrl = `${APPS_SCRIPT_URL}?action=getStats`;
-      const response = await fetchRequest(targetUrl);
-      const jsonData = JSON.parse(response.data);
-      res.status(response.status || 200).json(jsonData);
-      return;
-    }
-
-    // ============================================================
-    // 🔥 SUPPORT (PROXY KE APPS SCRIPT)
-    // ============================================================
+    // 🔥 SUPPORT (PROXY KE APPS SCRIPT - POST)
     if (path.startsWith('/api/v2/support')) {
       const targetUrl = `${APPS_SCRIPT_URL}?action=createSupport`;
       const response = await fetchRequest(targetUrl, {
@@ -179,15 +164,11 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // ============================================================
     // 🔥 PAYMENT CREATE (POST) - LANGSUNG KE BUATQRIS
-    // ============================================================
     if (path === '/api/v2/payment/create' && req.method === 'POST') {
       const { amount, subtotal, feeAdmin, customer, description, orderId, isTest } = req.body || {};
-      
       const amountToBuatQris = subtotal ? (subtotal + (feeAdmin || 0)) : amount;
-      
-      // 🔥 PANGGIL BUATQRIS LANGSUNG
+
       const params = new URLSearchParams();
       params.append('action', 'api_create_qris');
       params.append('account_id', process.env.BUATQRIS_ACCOUNT_ID || '');
@@ -196,7 +177,7 @@ module.exports = async (req, res) => {
       params.append('description', description || 'Pembayaran Order ' + orderId);
       params.append('test', isTest ? '1' : '0');
 
-      const response = await fetchRequest('https://api.buatqris.site', {
+      const response = await fetchRequest(BUATQRIS_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params.toString()
@@ -227,9 +208,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // ============================================================
     // 🔥 PAYMENT STATUS (GET) - LANGSUNG KE BUATQRIS
-    // ============================================================
     if (path.startsWith('/api/v2/payment/status/')) {
       const transactionId = path.split('/').pop();
 
@@ -239,7 +218,7 @@ module.exports = async (req, res) => {
       params.append('secret_token', process.env.BUATQRIS_SECRET_TOKEN || '');
       params.append('transaction_id', transactionId);
 
-      const response = await fetchRequest('https://api.buatqris.site', {
+      const response = await fetchRequest(BUATQRIS_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params.toString()
@@ -268,9 +247,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // ============================================================
     // 🔥 404
-    // ============================================================
     res.status(404).json({
       success: false,
       error: 'Endpoint not found',
