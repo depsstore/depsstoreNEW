@@ -62,18 +62,20 @@ module.exports = async (req, res) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${path}`);
 
   try {
+    // ============================================================
     // 🔥 ROOT
-    if (path === '/' || path === '') {
+    // ============================================================
+    if (path === '/' || path === '/api/v2/' || path === '/api/v2') {
       res.status(200).json({
         success: true,
         message: 'DepsStore API v2',
         version: '2.9.0',
         endpoints: {
           health: '/api/v2/system/health',
-          login: '/api/v2/auth/login',
-          register: '/api/v2/auth/register',
           products: '/api/v2/products',
           orders: '/api/v2/orders',
+          login: '/api/v2/auth/login',
+          register: '/api/v2/auth/register',
           support: '/api/v2/support',
           stats: '/api/v2/stats',
           payment: {
@@ -86,7 +88,9 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // 🔥 HEALTH
+    // ============================================================
+    // 🔥 HEALTH CHECK
+    // ============================================================
     if (path === '/health' || path === '/api/v2/system/health') {
       res.status(200).json({
         status: 'healthy',
@@ -97,7 +101,9 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // 🔥 PRODUCTS
+    // ============================================================
+    // 🔥 PRODUCTS (PROXY KE APPS SCRIPT)
+    // ============================================================
     if (path.startsWith('/api/v2/products')) {
       const targetUrl = `${APPS_SCRIPT_URL}?action=getProducts`;
       const response = await fetchRequest(targetUrl);
@@ -106,7 +112,9 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // 🔥 ORDERS
+    // ============================================================
+    // 🔥 ORDERS (PROXY KE APPS SCRIPT)
+    // ============================================================
     if (path.startsWith('/api/v2/orders')) {
       const targetUrl = `${APPS_SCRIPT_URL}?action=getOrders`;
       const response = await fetchRequest(targetUrl);
@@ -115,34 +123,39 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // 🔥 AUTH
-    if (path.startsWith('/api/v2/auth/')) {
-      let body = '';
-      if (req.method === 'POST' || req.method === 'PUT') {
-        body = JSON.stringify(req.body || {});
-      }
-
-      const headers = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      };
-
-      if (req.headers.authorization) {
-        headers['Authorization'] = req.headers.authorization;
-      }
-
+    // ============================================================
+    // 🔥 AUTH LOGIN (PROXY KE APPS SCRIPT)
+    // ============================================================
+    if (path === '/api/v2/auth/login' && req.method === 'POST') {
       const targetUrl = `${APPS_SCRIPT_URL}?action=login`;
       const response = await fetchRequest(targetUrl, {
-        method: req.method,
-        headers: headers,
-        body: body
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(req.body || {})
       });
       const jsonData = JSON.parse(response.data);
       res.status(response.status || 200).json(jsonData);
       return;
     }
 
-    // 🔥 STATS
+    // ============================================================
+    // 🔥 AUTH REGISTER (PROXY KE APPS SCRIPT)
+    // ============================================================
+    if (path === '/api/v2/auth/register' && req.method === 'POST') {
+      const targetUrl = `${APPS_SCRIPT_URL}?action=register`;
+      const response = await fetchRequest(targetUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(req.body || {})
+      });
+      const jsonData = JSON.parse(response.data);
+      res.status(response.status || 200).json(jsonData);
+      return;
+    }
+
+    // ============================================================
+    // 🔥 STATS (PROXY KE APPS SCRIPT)
+    // ============================================================
     if (path.startsWith('/api/v2/stats')) {
       const targetUrl = `${APPS_SCRIPT_URL}?action=getStats`;
       const response = await fetchRequest(targetUrl);
@@ -151,7 +164,9 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // 🔥 SUPPORT
+    // ============================================================
+    // 🔥 SUPPORT (PROXY KE APPS SCRIPT)
+    // ============================================================
     if (path.startsWith('/api/v2/support')) {
       const targetUrl = `${APPS_SCRIPT_URL}?action=createSupport`;
       const response = await fetchRequest(targetUrl, {
@@ -164,52 +179,98 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // 🔥 PAYMENT CREATE (POST)
+    // ============================================================
+    // 🔥 PAYMENT CREATE (POST) - LANGSUNG KE BUATQRIS
+    // ============================================================
     if (path === '/api/v2/payment/create' && req.method === 'POST') {
-      res.status(200).json({
-        success: true,
-        data: {
-          transactionId: 'MOCK-' + Date.now(),
-          qrUrl: 'https://via.placeholder.com/300x300?text=QRIS',
-          paymentUrl: 'https://app.buatqris.site/trx/MOCK-' + Date.now(),
-          amount: req.body.amount || 0,
-          totalAmount: req.body.amount || 0,
-          status: 'pending',
-          isTest: true,
-          expiredAt: new Date(Date.now() + 15 * 60 * 1000).toISOString()
-        }
+      const { amount, subtotal, feeAdmin, customer, description, orderId, isTest } = req.body || {};
+      
+      const amountToBuatQris = subtotal ? (subtotal + (feeAdmin || 0)) : amount;
+      
+      // 🔥 PANGGIL BUATQRIS LANGSUNG
+      const params = new URLSearchParams();
+      params.append('action', 'api_create_qris');
+      params.append('account_id', process.env.BUATQRIS_ACCOUNT_ID || '');
+      params.append('secret_token', process.env.BUATQRIS_SECRET_TOKEN || '');
+      params.append('amount', String(amountToBuatQris || 0));
+      params.append('description', description || 'Pembayaran Order ' + orderId);
+      params.append('test', isTest ? '1' : '0');
+
+      const response = await fetchRequest('https://api.buatqris.site', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString()
       });
+
+      try {
+        const jsonData = JSON.parse(response.data);
+        if (jsonData.success) {
+          const qrisData = jsonData.data;
+          res.status(200).json({
+            success: true,
+            data: {
+              transactionId: qrisData.transaction_id,
+              qrUrl: qrisData.qr_url,
+              paymentUrl: qrisData.payment_url,
+              amount: amountToBuatQris,
+              totalAmount: qrisData.total_amount,
+              serviceFee: qrisData.total_amount - amountToBuatQris,
+              expiredAt: new Date(Date.now() + 15 * 60 * 1000).toISOString()
+            }
+          });
+        } else {
+          res.status(400).json({ success: false, error: jsonData.message });
+        }
+      } catch (e) {
+        res.status(500).json({ success: false, error: 'Invalid response from BuatQris' });
+      }
       return;
     }
 
-    // 🔥 PAYMENT STATUS (GET)
+    // ============================================================
+    // 🔥 PAYMENT STATUS (GET) - LANGSUNG KE BUATQRIS
+    // ============================================================
     if (path.startsWith('/api/v2/payment/status/')) {
       const transactionId = path.split('/').pop();
-      res.status(200).json({
-        success: true,
-        data: {
-          transactionId: transactionId,
-          status: 'pending',
-          amount: 0,
-          totalAmount: 0,
-          isTest: true
+
+      const params = new URLSearchParams();
+      params.append('action', 'api_check_status');
+      params.append('account_id', process.env.BUATQRIS_ACCOUNT_ID || '');
+      params.append('secret_token', process.env.BUATQRIS_SECRET_TOKEN || '');
+      params.append('transaction_id', transactionId);
+
+      const response = await fetchRequest('https://api.buatqris.site', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString()
+      });
+
+      try {
+        const jsonData = JSON.parse(response.data);
+        if (jsonData.success) {
+          const statusData = jsonData.data;
+          res.status(200).json({
+            success: true,
+            data: {
+              transactionId: statusData.transaction_id,
+              status: statusData.status,
+              amount: statusData.amount,
+              totalAmount: statusData.total_amount,
+              isTest: statusData.is_test
+            }
+          });
+        } else {
+          res.status(400).json({ success: false, error: jsonData.message });
         }
-      });
+      } catch (e) {
+        res.status(500).json({ success: false, error: 'Invalid response from BuatQris' });
+      }
       return;
     }
 
-    // 🔥 API V2 ROOT
-    if (path === '/api/v2' || path === '/api/v2/') {
-      res.status(200).json({
-        success: true,
-        message: 'DepsStore API v2',
-        version: '2.9.0',
-        timestamp: new Date().toISOString()
-      });
-      return;
-    }
-
+    // ============================================================
     // 🔥 404
+    // ============================================================
     res.status(404).json({
       success: false,
       error: 'Endpoint not found',
