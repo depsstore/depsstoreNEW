@@ -1,4 +1,4 @@
-// api/index.js - Vercel Serverless Function (FINAL)
+// api/index.js - Vercel Serverless Function (FINAL - SEMUA ENDPOINT 200)
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
   const path = req.url || '/';
   console.log(`[${new Date().toISOString()}] ${req.method} ${path}`);
 
-  // 🔥 ROOT
+  // 🔥 ROOT & API V2 ROOT
   if (path === '/' || path === '' || path === '/api/v2/' || path === '/api/v2') {
     res.status(200).json({
       success: true,
@@ -37,7 +37,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // 🔥 HEALTH
+  // 🔥 HEALTH CHECK
   if (path === '/health' || path === '/api/v2/system/health') {
     res.status(200).json({
       status: 'healthy',
