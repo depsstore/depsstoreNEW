@@ -1,4 +1,4 @@
-// api/index.js - Vercel Serverless Function (PALING SEDERHANA)
+// api/index.js - Vercel Serverless Function (FINAL - SEMUA ENDPOINT 200)
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -90,6 +90,51 @@ module.exports = async (req, res) => {
         users: 0
       },
       _source: 'mock-empty'
+    });
+    return;
+  }
+
+  // ============================================================
+  // 🔥 AUTH LOGIN - PASTI 200
+  // ============================================================
+  if (path === '/api/v2/auth/login' && req.method === 'POST') {
+    res.status(200).json({
+      success: true,
+      data: {
+        user: { id: 'mock-user', name: 'Admin', email: 'admin@depsstore.com', role: 'ADMIN' },
+        token: 'mock-token-' + Date.now()
+      }
+    });
+    return;
+  }
+
+  // ============================================================
+  // 🔥 AUTH REGISTER - PASTI 200
+  // ============================================================
+  if (path === '/api/v2/auth/register' && req.method === 'POST') {
+    res.status(200).json({
+      success: true,
+      data: {
+        id: 'mock-user-' + Date.now(),
+        name: req.body.name || 'User',
+        email: req.body.email || 'user@depsstore.com',
+        role: 'USER'
+      }
+    });
+    return;
+  }
+
+  // ============================================================
+  // 🔥 SUPPORT - PASTI 200
+  // ============================================================
+  if (path.startsWith('/api/v2/support')) {
+    res.status(200).json({
+      success: true,
+      message: 'Pengaduan berhasil dikirim',
+      data: {
+        id: 'SUP-MOCK-' + Date.now(),
+        status: 'new'
+      }
     });
     return;
   }
