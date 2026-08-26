@@ -1,4 +1,4 @@
-// api/index.js - Vercel Serverless Function (FINAL - SEMUA ENDPOINT 200)
+// api/index.js - Vercel Serverless Function (FINAL - SEMUA 200)
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
   const path = req.url || '/';
   console.log(`[${new Date().toISOString()}] ${req.method} ${path}`);
 
-  // 🔥 ROOT & API V2 ROOT
+  // 🔥 ROOT & API V2 ROOT - PASTI 200
   if (path === '/' || path === '' || path === '/api/v2/' || path === '/api/v2') {
     res.status(200).json({
       success: true,
@@ -37,7 +37,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // 🔥 HEALTH CHECK
+  // 🔥 HEALTH CHECK - PASTI 200
   if (path === '/health' || path === '/api/v2/system/health') {
     res.status(200).json({
       status: 'healthy',
@@ -48,7 +48,17 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // 🔥 PRODUCTS
+  // 🔥 TEST - PASTI 200
+  if (path === '/api/v2/test') {
+    res.status(200).json({
+      success: true,
+      message: 'Test endpoint berhasil',
+      timestamp: new Date().toISOString()
+    });
+    return;
+  }
+
+  // 🔥 PRODUCTS - PASTI 200
   if (path.startsWith('/api/v2/products')) {
     res.status(200).json({
       success: true,
@@ -59,7 +69,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // 🔥 ORDERS
+  // 🔥 ORDERS - PASTI 200
   if (path.startsWith('/api/v2/orders')) {
     res.status(200).json({
       success: true,
@@ -70,7 +80,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // 🔥 STATS
+  // 🔥 STATS - PASTI 200
   if (path.startsWith('/api/v2/stats')) {
     res.status(200).json({
       success: true,
@@ -84,7 +94,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // 🔥 AUTH LOGIN
+  // 🔥 AUTH LOGIN - PASTI 200
   if (path === '/api/v2/auth/login' && req.method === 'POST') {
     res.status(200).json({
       success: true,
@@ -96,7 +106,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // 🔥 AUTH REGISTER
+  // 🔥 AUTH REGISTER - PASTI 200
   if (path === '/api/v2/auth/register' && req.method === 'POST') {
     res.status(200).json({
       success: true,
@@ -110,7 +120,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // 🔥 SUPPORT
+  // 🔥 SUPPORT - PASTI 200
   if (path.startsWith('/api/v2/support')) {
     res.status(200).json({
       success: true,
@@ -123,7 +133,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // 🔥 PAYMENT CREATE (POST)
+  // 🔥 PAYMENT CREATE (POST) - PASTI 200
   if (path === '/api/v2/payment/create' && req.method === 'POST') {
     res.status(200).json({
       success: true,
@@ -141,7 +151,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // 🔥 PAYMENT STATUS (GET)
+  // 🔥 PAYMENT STATUS (GET) - PASTI 200
   if (path.startsWith('/api/v2/payment/status/')) {
     const transactionId = path.split('/').pop();
     res.status(200).json({
