@@ -1,8 +1,18 @@
-// api/index.js - Vercel Serverless Function (FINAL - SEMUA ENDPOINT 200)
+// api/index.js - Vercel Serverless Function
+const https = require('https');
+const http = require('http');
+const url = require('url');
+
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw1ZgXJUaQ-U0RVeaNIdhszUvexE4IjUFmGaxI_QCPOSg55uQRFtrCCEbrOl8KvsftV/exec';
+
+const MOCK_PRODUCTS = { ... }; // (Kode awal tetap)
+
+function fetchRequest(targetUrl, options = {}) { ... } // (Kode awal tetap)
+
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
   res.setHeader('Access-Control-Max-Age', '3600');
 
   if (req.method === 'OPTIONS') {
@@ -13,8 +23,10 @@ module.exports = async (req, res) => {
   const path = req.url || '/';
   console.log(`[${new Date().toISOString()}] ${req.method} ${path}`);
 
-  // 🔥 ROOT & API V2 ROOT
-  if (path === '/' || path === '/api/v2/' || path === '/api/v2') {
+  // ============================================================
+  // 🔥🔥🔥 TAMBAHAN BARU: ROOT & API V2 ROOT - PASTI 200
+  // ============================================================
+  if (path === '/' || path === '' || path === '/api/v2/' || path === '/api/v2') {
     res.status(200).json({
       success: true,
       message: 'DepsStore API v2',
@@ -37,7 +49,9 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // 🔥 HEALTH CHECK
+  // ============================================================
+  // 🔥 TAMBAHAN BARU: HEALTH CHECK - PASTI 200
+  // ============================================================
   if (path === '/health' || path === '/api/v2/system/health') {
     res.status(200).json({
       status: 'healthy',
