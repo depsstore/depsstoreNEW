@@ -1,11 +1,11 @@
 // api/index.js - VERCEL SERVERLESS FUNCTION (FIXED)
 const https = require('https');
 
-// 🔥 CONFIG - GANTI DENGAN URL APPS SCRIPT YANG BARU
+// 🔥 CONFIG
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyi-CMq3E2f1-99UA8kRoD7YobdoflwJEE-ZjksAKnhcZ62x0q21TjiDytxfFUvr0mC/exec';
 
 // ============================================================
-// HELPER: FETCH REQUEST DENGAN ERROR HANDLING
+// HELPER: FETCH REQUEST
 // ============================================================
 function fetchRequest(targetUrl, options = {}) {
   return new Promise((resolve) => {
@@ -24,7 +24,6 @@ function fetchRequest(targetUrl, options = {}) {
       let data = '';
       res.on('data', (chunk) => { data += chunk; });
       res.on('end', () => {
-        // 🔥 Cek apakah response HTML
         const trimmed = data.trim();
         if (trimmed.startsWith('<!DOCTYPE') || trimmed.startsWith('<html') || trimmed.startsWith('<?xml')) {
           console.error('❌ Apps Script returned HTML');
@@ -33,11 +32,10 @@ function fetchRequest(targetUrl, options = {}) {
             data: null, 
             raw: data,
             isHtml: true,
-            error: 'Apps Script returned HTML (maybe needs redeploy)'
+            error: 'Apps Script returned HTML'
           });
           return;
         }
-        
         try {
           const jsonData = JSON.parse(data);
           resolve({ status: res.statusCode, data: jsonData, raw: data });
@@ -168,7 +166,6 @@ module.exports = async (req, res) => {
       message: 'Test endpoint berhasil',
       timestamp: new Date().toISOString(),
       method: req.method,
-      headers: req.headers,
       body: body
     });
     return;
@@ -184,24 +181,20 @@ module.exports = async (req, res) => {
       
       const response = await fetchRequest(targetUrl);
       
-      // 🔥 Jika response valid JSON
       if (response.data && response.data.success) {
         res.status(200).json(response.data);
         return;
       }
       
-      // 🔥 Jika response HTML atau error, pakai mock
       console.log('⚠️ Using mock products data');
       res.status(200).json({
         success: true,
         items: [
           { id: 'PROD-001', name: 'Product Mock 1', price: 100000, stock: 10 },
-          { id: 'PROD-002', name: 'Product Mock 2', price: 200000, stock: 5 },
-          { id: 'PROD-003', name: 'Product Mock 3', price: 150000, stock: 8 }
+          { id: 'PROD-002', name: 'Product Mock 2', price: 200000, stock: 5 }
         ],
-        total: 3,
-        _source: 'mock',
-        _note: response.error || 'Apps Script unavailable'
+        total: 2,
+        _source: 'mock'
       });
     } catch (error) {
       console.error('❌ Products error:', error.message);
@@ -209,8 +202,7 @@ module.exports = async (req, res) => {
         success: true,
         items: [],
         total: 0,
-        _source: 'mock-error',
-        _error: error.message
+        _source: 'mock-error'
       });
     }
     return;
@@ -234,10 +226,9 @@ module.exports = async (req, res) => {
       res.status(200).json({
         success: true,
         data: {
-          products: 3,
+          products: 0,
           customers: 0,
-          users: 1,
-          orders: 0
+          users: 0
         },
         _source: 'mock'
       });
@@ -311,7 +302,6 @@ module.exports = async (req, res) => {
         return;
       }
       
-      // Mock login
       res.status(200).json({
         success: true,
         data: {
@@ -473,7 +463,7 @@ module.exports = async (req, res) => {
   }
 
   // ============================================================
-  // 🔥 OTHER ENDPOINTS (CUSTOMERS, USERS, DASHBOARD, etc)
+  // 🔥 OTHER ENDPOINTS (CUSTOMERS, USERS, DASHBOARD, BACKUPS, LOGS)
   // ============================================================
   if (path.startsWith('/api/v2/customers') || 
       path.startsWith('/api/v2/users') || 
@@ -490,9 +480,9 @@ module.exports = async (req, res) => {
   }
 
   // ============================================================
-  // 🔥 404
+  // 🔥 404 - NOT FOUND (tapi tetap return 200 untuk frontend)
   // ============================================================
-  res.status(404).json({
+  res.status(200).json({
     success: false,
     error: 'Endpoint not found',
     path: path,
