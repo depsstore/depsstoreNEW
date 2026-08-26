@@ -59,7 +59,7 @@ module.exports = async (req, res) => {
   }
 
   // 🔥 PRODUCTS - PASTI 200
-  if (path.startsWith('/api/v2/products')) {
+  if (path === '/api/v2/products' || path === '/api/v2/products/') {
     res.status(200).json({
       success: true,
       items: [],
@@ -69,8 +69,62 @@ module.exports = async (req, res) => {
     return;
   }
 
+  // 🔥 PRODUCTS BY ID
+  if (path.match(/^\/api\/v2\/products\/[^\/]+$/)) {
+    const id = path.split('/').pop();
+    res.status(200).json({
+      success: true,
+      data: {
+        id: id,
+        name: 'Mock Product',
+        price: 100000,
+        stock: 10,
+        _source: 'mock'
+      }
+    });
+    return;
+  }
+
   // 🔥 ORDERS - PASTI 200
-  if (path.startsWith('/api/v2/orders')) {
+  if (path === '/api/v2/orders' || path === '/api/v2/orders/') {
+    res.status(200).json({
+      success: true,
+      items: [],
+      total: 0,
+      _source: 'mock-empty'
+    });
+    return;
+  }
+
+  // 🔥 ORDERS BY ID
+  if (path.match(/^\/api\/v2\/orders\/[^\/]+$/)) {
+    const id = path.split('/').pop();
+    res.status(200).json({
+      success: true,
+      data: {
+        id: id,
+        customer: 'Mock Customer',
+        total: 0,
+        status: 'pending',
+        _source: 'mock'
+      }
+    });
+    return;
+  }
+
+  // 🔥 CUSTOMERS
+  if (path === '/api/v2/customers' || path === '/api/v2/customers/') {
+    res.status(200).json({
+      success: true,
+      items: [],
+      total: 0,
+      _source: 'mock-empty'
+    });
+    return;
+  }
+
+  // 🔥 USERS
+  if (path === '/api/v2/users' || path === '/api/v2/users/') {
     res.status(200).json({
       success: true,
       items: [],
@@ -81,7 +135,7 @@ module.exports = async (req, res) => {
   }
 
   // 🔥 STATS - PASTI 200
-  if (path.startsWith('/api/v2/stats')) {
+  if (path === '/api/v2/stats' || path === '/api/v2/stats/') {
     res.status(200).json({
       success: true,
       data: {
@@ -90,6 +144,36 @@ module.exports = async (req, res) => {
         users: 0
       },
       _source: 'mock-empty'
+    });
+    return;
+  }
+
+  // 🔥 DASHBOARD
+  if (path === '/api/v2/dashboard' || path === '/api/v2/dashboard/') {
+    res.status(200).json({
+      success: true,
+      data: {
+        totalRevenue: 0,
+        totalOrders: 0,
+        totalProducts: 0,
+        totalCustomers: 0
+      },
+      _source: 'mock-empty'
+    });
+    return;
+  }
+
+  // 🔥 AUTH ME
+  if (path === '/api/v2/auth/me') {
+    res.status(200).json({
+      success: true,
+      data: {
+        id: 'mock-user',
+        name: 'Admin',
+        email: 'admin@depsstore.com',
+        role: 'ADMIN',
+        _source: 'mock'
+      }
     });
     return;
   }
@@ -121,15 +205,24 @@ module.exports = async (req, res) => {
   }
 
   // 🔥 SUPPORT - PASTI 200
-  if (path.startsWith('/api/v2/support')) {
-    res.status(200).json({
-      success: true,
-      message: 'Pengaduan berhasil dikirim',
-      data: {
-        id: 'SUP-MOCK-' + Date.now(),
-        status: 'new'
-      }
-    });
+  if (path === '/api/v2/support' || path === '/api/v2/support/') {
+    if (req.method === 'POST') {
+      res.status(200).json({
+        success: true,
+        message: 'Pengaduan berhasil dikirim',
+        data: {
+          id: 'SUP-MOCK-' + Date.now(),
+          status: 'new'
+        }
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        items: [],
+        total: 0,
+        _source: 'mock-empty'
+      });
+    }
     return;
   }
 
@@ -167,7 +260,54 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // 🔥 404
+  // 🔥 BACKUPS
+  if (path.startsWith('/api/v2/backups')) {
+    res.status(200).json({
+      success: true,
+      data: {
+        backups: [],
+        total: 0,
+        _source: 'mock-empty'
+      }
+    });
+    return;
+  }
+
+  // 🔥 LOGS
+  if (path.startsWith('/api/v2/logs')) {
+    res.status(200).json({
+      success: true,
+      data: {
+        logs: [],
+        total: 0,
+        _source: 'mock-empty'
+      }
+    });
+    return;
+  }
+
+  // 🔥 404 - TETAP 200 UNTUK FRONTEND
+  // Cek apakah request dari browser (accepts HTML)
+  const acceptHeader = req.headers.accept || '';
+  if (acceptHeader.includes('text/html')) {
+    // Kirim index.html untuk SPA
+    res.status(200).send(`
+      <!DOCTYPE html>
+      <html>
+        <head><title>DepsStore</title></head>
+        <body>
+          <div id="root">Loading...</div>
+          <script>
+            // Redirect ke frontend
+            window.location.href = '/';
+          </script>
+        </body>
+      </html>
+    `);
+    return;
+  }
+
+  // Untuk API request yang tidak dikenal, return 404
   res.status(404).json({
     success: false,
     error: 'Endpoint not found',
