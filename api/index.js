@@ -1,4 +1,4 @@
-// api/index.js - VERSI FINAL (GABUNGAN)
+// api/index.js - VERCEL SERVERLESS FUNCTION (FINAL)
 const https = require('https');
 
 // 🔥 CONFIG
@@ -118,7 +118,8 @@ module.exports = async (req, res) => {
         orders: '/api/v2/orders',
         login: '/api/v2/auth/login (POST)',
         register: '/api/v2/auth/register (POST)',
-        support: '/api/v2/support (POST)'
+        support: '/api/v2/support (POST)',
+        payment: '/api/v2/payment/create (POST)'
       },
       timestamp: new Date().toISOString()
     });
@@ -177,7 +178,7 @@ module.exports = async (req, res) => {
   }
 
   // ============================================================
-  // 🔥 PRODUCTS - REAL DATA
+  // 🔥 PRODUCTS
   // ============================================================
   if (path === '/api/v2/products' || path === '/api/v2/products/') {
     try {
@@ -191,7 +192,6 @@ module.exports = async (req, res) => {
         return;
       }
       
-      // Fallback mock
       res.status(200).json({
         success: true,
         items: [],
@@ -211,10 +211,9 @@ module.exports = async (req, res) => {
   }
 
   // ============================================================
-  // 🔥 STATS - FORCE MOCK (KARENA APPS SCRIPT ERROR)
+  // 🔥 STATS - FORCE MOCK (karena Apps Script error)
   // ============================================================
   if (path === '/api/v2/stats' || path === '/api/v2/stats/') {
-    // 🔥 Gunakan mock data karena Apps Script untuk stats error
     res.status(200).json({
       success: true,
       data: {
