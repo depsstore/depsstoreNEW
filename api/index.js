@@ -5,10 +5,8 @@ const https = require('https');
 const http = require('http');
 const url = require('url');
 
-// 🔥 APPS SCRIPT URL DARI ANDA
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyi-CMq3E2f1-99UA8kRoD7YobdoflwJEE-ZjksAKnhcZ62x0q21TjiDytxfFUvr0mC/exec';
 
-// 🔥 MOCK DATA (FALLBACK)
 const MOCK_PRODUCTS = {
   success: true,
   items: [
@@ -23,10 +21,6 @@ const MOCK_PRODUCTS = {
   timestamp: new Date().toISOString(),
   _source: 'mock-data'
 };
-
-// ============================================================
-// HELPER: FETCH REQUEST
-// ============================================================
 
 function fetchRequest(targetUrl, options = {}) {
   return new Promise((resolve, reject) => {
@@ -44,35 +38,18 @@ function fetchRequest(targetUrl, options = {}) {
 
     const req = httpModule.request(requestOptions, (response) => {
       let data = '';
-
-      response.on('data', (chunk) => {
-        data += chunk;
-      });
-
+      response.on('data', (chunk) => { data += chunk; });
       response.on('end', () => {
-        resolve({
-          status: response.statusCode,
-          headers: response.headers,
-          data: data
-        });
+        resolve({ status: response.statusCode, headers: response.headers, data: data });
       });
     });
 
-    req.on('error', (error) => {
-      reject(error);
-    });
+    req.on('error', (error) => { reject(error); });
 
-    if (options.body) {
-      req.write(options.body);
-    }
-
+    if (options.body) { req.write(options.body); }
     req.end();
   });
 }
-
-// ============================================================
-// VERCELL SERVERLESS HANDLER
-// ============================================================
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -89,9 +66,7 @@ module.exports = async (req, res) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${path}`);
 
   try {
-    // ============================================================
-    // 🔥 ROOT & API V2 ROOT - PASTI 200
-    // ============================================================
+    // 🔥 ROOT & API V2 ROOT
     if (path === '/' || path === '' || path === '/api/v2/' || path === '/api/v2') {
       res.status(200).json({
         success: true,
@@ -115,9 +90,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // ============================================================
-    // 🔥 HEALTH CHECK - PASTI 200
-    // ============================================================
+    // 🔥 HEALTH CHECK
     if (path === '/health' || path === '/api/v2/system/health') {
       res.status(200).json({
         status: 'healthy',
@@ -128,9 +101,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // ============================================================
-    // 🔥 PRODUCTS - PROXY KE APPS SCRIPT
-    // ============================================================
+    // 🔥 PRODUCTS (PROXY KE APPS SCRIPT)
     if (path.startsWith('/api/v2/products')) {
       const targetUrl = `${APPS_SCRIPT_URL}?action=getProducts`;
       const response = await fetchRequest(targetUrl);
@@ -143,9 +114,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // ============================================================
-    // 🔥 ORDERS - PROXY KE APPS SCRIPT
-    // ============================================================
+    // 🔥 ORDERS (PROXY KE APPS SCRIPT)
     if (path.startsWith('/api/v2/orders')) {
       const targetUrl = `${APPS_SCRIPT_URL}?action=getOrders`;
       const response = await fetchRequest(targetUrl);
@@ -158,9 +127,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // ============================================================
-    // 🔥 STATS - PROXY KE APPS SCRIPT
-    // ============================================================
+    // 🔥 STATS (PROXY KE APPS SCRIPT)
     if (path.startsWith('/api/v2/stats')) {
       const targetUrl = `${APPS_SCRIPT_URL}?action=getStats`;
       const response = await fetchRequest(targetUrl);
@@ -173,9 +140,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // ============================================================
-    // 🔥 AUTH LOGIN - PROXY KE APPS SCRIPT
-    // ============================================================
+    // 🔥 AUTH LOGIN
     if (path === '/api/v2/auth/login' && req.method === 'POST') {
       const targetUrl = `${APPS_SCRIPT_URL}?action=login`;
       const response = await fetchRequest(targetUrl, {
@@ -192,9 +157,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // ============================================================
-    // 🔥 AUTH REGISTER - PROXY KE APPS SCRIPT
-    // ============================================================
+    // 🔥 AUTH REGISTER
     if (path === '/api/v2/auth/register' && req.method === 'POST') {
       const targetUrl = `${APPS_SCRIPT_URL}?action=register`;
       const response = await fetchRequest(targetUrl, {
@@ -211,9 +174,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // ============================================================
-    // 🔥 SUPPORT - PROXY KE APPS SCRIPT
-    // ============================================================
+    // 🔥 SUPPORT (PROXY KE APPS SCRIPT)
     if (path.startsWith('/api/v2/support')) {
       const targetUrl = `${APPS_SCRIPT_URL}?action=createSupport`;
       const response = await fetchRequest(targetUrl, {
@@ -230,9 +191,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // ============================================================
-    // 🔥 PAYMENT CREATE (POST) - LANGSUNG KE BUATQRIS
-    // ============================================================
+    // 🔥 PAYMENT CREATE (POST)
     if (path === '/api/v2/payment/create' && req.method === 'POST') {
       const { amount, subtotal, feeAdmin, description, orderId, isTest } = req.body || {};
       const amountToBuatQris = subtotal ? (subtotal + (feeAdmin || 0)) : amount;
@@ -288,12 +247,9 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // ============================================================
-    // 🔥 PAYMENT STATUS (GET) - LANGSUNG KE BUATQRIS
-    // ============================================================
+    // 🔥 PAYMENT STATUS (GET)
     if (path.startsWith('/api/v2/payment/status/')) {
       const transactionId = path.split('/').pop();
-
       const params = new URLSearchParams();
       params.append('action', 'api_check_status');
       params.append('account_id', process.env.BUATQRIS_ACCOUNT_ID || '');
@@ -338,9 +294,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // ============================================================
     // 🔥 404
-    // ============================================================
     res.status(404).json({
       success: false,
       error: 'Endpoint not found',
