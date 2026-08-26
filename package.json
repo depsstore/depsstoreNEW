@@ -1,23 +1,12 @@
 {
-    "version": 2,
-    "builds": [
-        {
-            "src": "api/index.js",
-            "use": "@vercel/node"
-        }
-    ],
-    "routes": [
-        {
-            "src": "/api/(.*)",
-            "dest": "/api/index.js"
-        },
-        {
-            "src": "/",
-            "dest": "/src/frontend/index.html"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/src/frontend/$1"
-        }
-    ]
+  "name": "depsstore-api",
+  "version": "2.9.0",
+  "description": "DepsStore API",
+  "main": "api/index.js",
+  "scripts": {
+    "start": "node api/index.js"
+  },
+  "engines": {
+    "node": "22.x"
+  }
 }
