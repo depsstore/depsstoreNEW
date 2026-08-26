@@ -1,4 +1,4 @@
-// api/index.js - VERCEL SERVERLESS FUNCTION (FIXED)
+// api/index.js - VERSI FINAL (GABUNGAN)
 const https = require('https');
 
 // 🔥 CONFIG
@@ -104,14 +104,22 @@ module.exports = async (req, res) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${path}`);
 
   // ============================================================
-  // 🔥 ROOT - PASTI 200
+  // 🔥 ROOT
   // ============================================================
   if (path === '/' || path === '') {
     res.status(200).json({
       success: true,
       message: 'DepsStore API v2',
       version: '2.9.0',
-      documentation: 'https://depsstore-api.vercel.app/api/v2',
+      endpoints: {
+        health: '/api/v2/health',
+        products: '/api/v2/products',
+        stats: '/api/v2/stats',
+        orders: '/api/v2/orders',
+        login: '/api/v2/auth/login (POST)',
+        register: '/api/v2/auth/register (POST)',
+        support: '/api/v2/support (POST)'
+      },
       timestamp: new Date().toISOString()
     });
     return;
@@ -144,40 +152,37 @@ module.exports = async (req, res) => {
   }
 
   // ============================================================
-  // 🔥 HEALTH - PASTI 200
+  // 🔥 HEALTH
   // ============================================================
   if (path === '/health' || path === '/api/v2/health' || path === '/api/v2/system/health') {
     res.status(200).json({
       status: 'healthy',
       timestamp: new Date().toISOString(),
       version: '2.9.0',
-      environment: 'production',
-      uptime: process.uptime()
+      environment: 'production'
     });
     return;
   }
 
   // ============================================================
-  // 🔥 TEST - PASTI 200
+  // 🔥 TEST
   // ============================================================
   if (path === '/api/v2/test' || path === '/test') {
     res.status(200).json({
       success: true,
       message: 'Test endpoint berhasil',
-      timestamp: new Date().toISOString(),
-      method: req.method,
-      body: body
+      timestamp: new Date().toISOString()
     });
     return;
   }
 
   // ============================================================
-  // 🔥 PRODUCTS
+  // 🔥 PRODUCTS - REAL DATA
   // ============================================================
   if (path === '/api/v2/products' || path === '/api/v2/products/') {
     try {
       const targetUrl = `${APPS_SCRIPT_URL}?action=getProducts&_t=${Date.now()}`;
-      console.log(`📤 Fetching: ${targetUrl}`);
+      console.log(`📤 Fetching products: ${targetUrl}`);
       
       const response = await fetchRequest(targetUrl);
       
@@ -186,15 +191,12 @@ module.exports = async (req, res) => {
         return;
       }
       
-      console.log('⚠️ Using mock products data');
+      // Fallback mock
       res.status(200).json({
         success: true,
-        items: [
-          { id: 'PROD-001', name: 'Product Mock 1', price: 100000, stock: 10 },
-          { id: 'PROD-002', name: 'Product Mock 2', price: 200000, stock: 5 }
-        ],
-        total: 2,
-        _source: 'mock'
+        items: [],
+        total: 0,
+        _source: 'mock-empty'
       });
     } catch (error) {
       console.error('❌ Products error:', error.message);
@@ -209,40 +211,21 @@ module.exports = async (req, res) => {
   }
 
   // ============================================================
-  // 🔥 STATS
+  // 🔥 STATS - FORCE MOCK (KARENA APPS SCRIPT ERROR)
   // ============================================================
   if (path === '/api/v2/stats' || path === '/api/v2/stats/') {
-    try {
-      const targetUrl = `${APPS_SCRIPT_URL}?action=getStats&_t=${Date.now()}`;
-      console.log(`📤 Fetching: ${targetUrl}`);
-      
-      const response = await fetchRequest(targetUrl);
-      
-      if (response.data && response.data.success) {
-        res.status(200).json(response.data);
-        return;
-      }
-      
-      res.status(200).json({
-        success: true,
-        data: {
-          products: 0,
-          customers: 0,
-          users: 0
-        },
-        _source: 'mock'
-      });
-    } catch (error) {
-      res.status(200).json({
-        success: true,
-        data: {
-          products: 0,
-          customers: 0,
-          users: 0
-        },
-        _source: 'mock-error'
-      });
-    }
+    // 🔥 Gunakan mock data karena Apps Script untuk stats error
+    res.status(200).json({
+      success: true,
+      data: {
+        products: 16,
+        customers: 0,
+        users: 2,
+        orders: 0,
+        timestamp: new Date().toISOString()
+      },
+      _source: 'mock'
+    });
     return;
   }
 
@@ -426,8 +409,8 @@ module.exports = async (req, res) => {
   // 🔥 PAYMENT
   // ============================================================
   if (path === '/api/v2/payment/create' && req.method === 'POST') {
-    const { amount, subtotal, feeAdmin, description, orderId, isTest } = body || {};
-    const amountToBuatQris = subtotal ? (subtotal + (feeAdmin || 0)) : (amount || 100000);
+    const { amount } = body || {};
+    const amountToBuatQris = amount || 100000;
 
     res.status(200).json({
       success: true,
@@ -463,13 +446,11 @@ module.exports = async (req, res) => {
   }
 
   // ============================================================
-  // 🔥 OTHER ENDPOINTS (CUSTOMERS, USERS, DASHBOARD, BACKUPS, LOGS)
+  // 🔥 CUSTOMERS, USERS, DASHBOARD
   // ============================================================
   if (path.startsWith('/api/v2/customers') || 
       path.startsWith('/api/v2/users') || 
-      path.startsWith('/api/v2/dashboard') ||
-      path.startsWith('/api/v2/backups') ||
-      path.startsWith('/api/v2/logs')) {
+      path.startsWith('/api/v2/dashboard')) {
     res.status(200).json({
       success: true,
       data: [],
@@ -480,9 +461,9 @@ module.exports = async (req, res) => {
   }
 
   // ============================================================
-  // 🔥 404 - NOT FOUND (tapi tetap return 200 untuk frontend)
+  // 🔥 404
   // ============================================================
-  res.status(200).json({
+  res.status(404).json({
     success: false,
     error: 'Endpoint not found',
     path: path,
